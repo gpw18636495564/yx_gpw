@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "http://mybatis.org/dtd/mybatis-3-mapper.dtd" "mybatis-3-mapper.dtd" >
+<mapper namespace="com.baizhi.dao.CategoryDao">
+    <select id="selectOne" resultType="Category">
+        select * from yx_category where levels=1 limit #{begin},#{size}
+    </select>
+    <select id="selectTwo" resultType="Category">
+        select * from yx_category where parent_id=#{id} limit #{begin},#{size}
+    </select>
+    <select id="selectTwoall" resultType="Category">
+        select * from yx_category where parent_id=#{id}
+    </select>
+    <insert id="insertOne" parameterType="Category">
+        insert into yx_category(id,cate_name,levels) values(#{id},#{cate_name},#{levels})
+    </insert>
+    <insert id="insertTwo" parameterType="Category">
+        insert into yx_category values(#{id},#{cate_name},#{levels},#{parent_id})
+    </insert>
+    <update id="update" parameterType="Category">
+        update yx_category
+        <set>
+            <if test="cate_name!=null">cate_name=#{cate_name}</if>
+            <if test="levels!=null">,levels=#{levels}</if>
+            <if test="parent_id!=null">,parent_id=#{parent_id}</if>
+            where id=#{id}
+        </set>
+    </update>
+    <delete id="delete" parameterType="String">
+        delete from yx_category where id=#{id}
+    </delete>
+    <select id="select1" parameterType="String" resultType="Category">
+        select * from yx_category where id=#{id}
+    </select>
+    <select id="count1" resultType="Integer">
+        select count(*) from yx_category where levels=1
+    </select>
+    <select id="count2" resultType="Integer">
+        select count(*) from yx_category where parent_id=#{id}
+    </select>
+    <resultMap id="res1" type="com.baizhi.po.Category">
+        <id column="id" property="id"/>
+        <result column="cateName" property="cateName"/>
+        <result column="levels" property="levels"/>
+        <result column="parentId" property="parentId"/>
+        <!-- 封装关系属性：是一个集合 -->
+        <collection property="categoryList" ofType="com.baizhi.po.Category">
+            <id column="id1" property="id"/>
+            <result column="cateName1" property="cateName"/>
+            <result column="levels1" property="levels"/>
+            <result column="parentId1" property="parentId"/>
+        </collection>
+    </resultMap>
+    <select id="pageAll" resultMap="res1">
+        select
+        e.id id,e.cate_name cateName,e.levels levels,e.parent_id parentId,
+        v.id id1,v.cate_name cateName1,v.levels levels1,v.parent_id parentId1
+        FROM yx_category e JOIN yx_category v ON e.id=v.parent_id
+    </select>
+</mapper>

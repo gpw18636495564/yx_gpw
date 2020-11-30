@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "http://mybatis.org/dtd/mybatis-3-mapper.dtd" "mybatis-3-mapper.dtd" >
+<mapper namespace="com.baizhi.dao.VideoDao">
+    <select id="selectpage" resultType="Video">
+        select * from yx_video limit #{begin},#{pagesize}
+    </select>
+    <select id="count" resultType="Integer">
+        select count(id) from yx_video
+    </select>
+    <insert id="insert" parameterType="Video">
+        insert into yx_video values(#{id},#{name},#{brief},#{cover_path},
+        #{video_path},#{upload_time},#{like_count},#{play_count},#{category_id},#{user_id},
+        #{group_id},#{state})
+    </insert>
+    <update id="updateImg" parameterType="Video">
+        update yx_video
+        <set>
+            <if test="cover_path!=null">cover_path=#{cover_path}</if>
+            <if test="video_path!=null">,video_path=#{video_path}</if>
+        </set>
+        where id=#{id}
+    </update>
+    <update id="update" parameterType="Video">
+        update yx_video
+        <set>
+            upload_time=#{upload_time}
+            <if test="cover_path!=null">,cover_path=#{cover_path}</if>
+            <if test="name!=null">,name=#{name}</if>
+            <if test="brief!=null">,brief=#{brief}</if>
+            <if test="play_count!=null">,play_count=#{play_count}</if>
+            <if test="category_id!=null">,category_id=#{category_id}</if>
+            <if test="user_id!=null">,user_id=#{user_id}</if>
+            <if test="group_id!=null">,group_id=#{group_id}</if>
+            <if test="state!=null">,state=#{state}</if>
+            <if test="like_count!=null">,like_count=#{like_count}</if>
+            <if test="video_path!=null">,video_path=#{video_path}</if>
+        </set>
+        where id=#{id}
+    </update>
+    <delete id="delete" parameterType="String">
+        delete from yx_video where id=#{id}
+    </delete>
+    <select id="selectOne" resultType="Video" parameterType="String">
+        select * from yx_video where id=#{id}
+    </select>
+<!--user和分类表的三表查询-->
+    <select id="queryByReleaseTime" resultType="com.baizhi.po.VideoPO">
+        SELECT c.cate_name cateName,v.id,v.name videoTitle,
+        v.cover_path cover,v.video_path path,v.upload_time uploadTime,v.brief description,v.like_count likeCount,
+        u.pic_img userPhoto
+        FROM yx_category c RIGHT JOIN yx_video v ON c.id=v.category_id LEFT JOIN yx_user u ON user_id=u.id
+    </select>
+    <select id="queryByLikeVideoName" resultType="com.baizhi.po.VideoPO" parameterType="java.lang.String">
+        SELECT c.cate_name cateName,v.id,v.name videoTitle,
+        v.cover_path cover,v.video_path path,v.upload_time uploadTime,v.brief description,v.category_id categoryId,v.like_count likeCount,
+        u.pic_img userPhoto,u.id userId,u.nick_name userName
+        FROM yx_category c RIGHT JOIN yx_video v ON c.id=v.category_id LEFT JOIN yx_user u ON user_id=u.id
+        where v.name like concat('%',#{content},'%')
+        ORDER BY v.upload_time
+    </select>
+</mapper>

@@ -1,0 +1,35 @@
+server:
+  port: 8989
+  servlet:
+    context-path: /yingx
+    jsp:
+      init-parameters:
+        development: true
+spring:
+  mvc:
+    view:
+      prefix: /
+      suffix: .jsp
+  datasource:
+    type: com.alibaba.druid.pool.DruidDataSource
+    driver-class-name: com.mysql.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/yx?characterEncoding=UTF-8
+    username: root
+    password: 430607
+  servlet:
+    multipart:
+      max-file-size: 800MB
+      max-request-size: 1024MB
+  redis:
+    host: 121.196.148.75
+    port: 7000
+    database: 0
+mybatis: #创建sqlSessionFactory
+  mapper-locations: classpath:com/baizhi/*mapper/*.xml
+  type-aliases-package: com.baizhi.entity
+logging:
+  level:
+    root: info #修改rootLogger日志的级别
+    com.baizhi.dao: debug
+    com.baizhi.service: debug
+    com.baizhi.controller: info
