@@ -89,5 +89,9 @@ public class UserTest {
         Integer[] count2 = gol.toArray(new Integer[gol.size()]);
 //        System.out.println("男"+boy);
     }
+    @Test
+    public void yy(){
+    System.out.println("我是你爸爸");
+    }
 
 }
