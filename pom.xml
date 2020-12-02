@@ -190,10 +190,16 @@
       <artifactId>goeasy-sdk</artifactId>
       <version>0.3.14</version>
     </dependency>
-<!-- redis-->
+    <!-- redis-->
     <dependency>
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-starter-data-redis</artifactId>
+    </dependency>
+    <!--开发Shiro-->
+    <dependency>
+      <groupId>org.apache.shiro</groupId>
+      <artifactId>shiro-core</artifactId>
+      <version>1.3.2</version>
     </dependency>
   </dependencies>
 
